@@ -15,3 +15,8 @@ class updatemForm(forms.modelform):
     class Meta:
         model =movie
         fields= ["title","text"]
+
+class MovieForm(forms.ModelForm):#arsalan
+    class Meta:
+        model = movie
+        fields = ['title','text']
