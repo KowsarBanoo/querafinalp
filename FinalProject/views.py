@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404 #404 baraye movie haei ke vojOod nadaran
 from django.contrib.auth import login, logout, authenticate
 from .models import User, critic, movie
-from .forms import criticForm, RegisterForm, LoginForm #اینها با توجه به اسامی ای که در بخش های مدل و غیره می زنیم زیاد و کم میشن
+from .forms import updatemForm, RegisterForm, LoginForm #اینها با توجه به اسامی ای که در بخش های مدل و غیره می زنیم زیاد و کم میشن
 
 # Create your views here.
 def createc(request): #createc means create critic/ so createm means create movie
@@ -25,11 +25,21 @@ def createm(request):
     pass
 
 
-def retrievem(request, id):
-    pass
+def retrievem(request, id): #masalan bezane retrieve,5 bayad betOone data ye film 5 ro bekhOone
+    m= movie.objects.get (id=id)
+    if request.user.id== m.creator.id:
+        return render (request, 'read.html', {'object':m})
 
 
 def updatem(request, id):
+    if request.user.is_authenticated:
+        if request.method=='GET':
+            movie_id=request.GET.get('id')
+            movie=get_object_or_404(movie,id=movie_id)
+            return render(request,'movie.html', {'movie':movie}, {'form':updatemForm()})
+    elif request.method =='POST':
+    else:
+        return redirect ("FinalProject:login")
     pass
 
 
