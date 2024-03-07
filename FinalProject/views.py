@@ -20,8 +20,25 @@ def deletec(request, id):
     pass
 
 
-def createm(request):
-    pass
+def createm(request):# 
+    if request.user.is_authenticated:# اگه لاگین بود
+        if request.method == 'POST':#فرم رو پر کرده و فرستاده
+            form = MovieForm(request.POST)
+            if form.is_valid():
+                user = User.objects.get(id=request.user.id)
+                k = Movie.objects.create
+                (
+                    title = form.cleaned_data['title'],
+                    text = form.cleaned_data['text']
+                    creator = user
+                )    
+                return redirect('create', id = k.id)
+            else:
+                return render(request,'create_movie.html',{'form':form})
+        else:#میخواد یه فرم پر کنه
+            return render(request, 'create_movie.html', {'form':MovieForm()})
+    else:
+        return redirect("userlogin")
 
 
 def retrievem(request, id):
@@ -32,8 +49,11 @@ def updatem(request, id):
     pass
 
 
-def deletem(request, id):
-    pass
+def deletem(request, id):#
+    k = Movie.objects.get(id=id)
+    if request.user.id == k.creator.id:
+        k.delete()
+        return redirect('delete-movie')#دوباره اگه خواست پاک کنه
 
 def usersignup(request):
     pass
