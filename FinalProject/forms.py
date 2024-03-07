@@ -1,7 +1,12 @@
-from django import forms 
-from .models import user# یه چیز دیگه باید ایمپورت بشه و مدل هم یه چیزی داره
+from djnango import forms
+from .models import User
 
-class MovieForm(forms.ModelForm):
+class RegisterForm(forms.ModelsForm):
     class Meta:
-        # model = 
-        fields = ['title','text']
+        model = User
+        fields = ["username", "email", "password"]
+
+class LoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["email", "password"]

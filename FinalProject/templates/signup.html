@@ -1,0 +1,13 @@
+<form action="{% url 'register' %}" method="POST">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Sabte nam</legend>
+    <ul>
+      {{ form.as_table }}
+
+      <button type="submit" class="mybutton _f-purple" value="submit">
+        Register
+      </button>
+    </ul>
+  </fieldset>
+</form>
