@@ -60,21 +60,27 @@ def createm(request):  # arsalan
         return redirect("userlogin")
 
 
-def retrievem(request, id):  # masalan bezane retrieve,5 bayad betOone data ye film 5 ro bekhOone
-    m = Movie.objects.get(id=id)
-    if request.user.id == m.creator.id:
-        return render(request, 'read.html', {'object': m})
+def retrievem(request, id): #masalan bezane retrieve,5 bayad betOone data ye movie ye 5 ro bekhOone
+    movie= movie.objects.get (id=id) #baz yabiye data haye obj mobie/ inja bayad modeli baraye mivie dashte bashim
+    if request.user.id== movie.creator.id:#inja faghat sazandeye movie mitOone behesh dastra30 dashte bashe 
+        return render (request, 'read.html', {'object':movie}) #data ro neshOon mide behesh
 
 
-def updatem(request, id):
-    if request.user.is_authenticated:
-        if request.method == 'GET':
-            movie_id = request.GET.get('id')
-            movie = get_object_or_404(movie, id=movie_id)
-            return render(request, 'movie.html', {'movie': movie}, {'form': updatemForm()})
-    else:
-        return redirect("FinalProject:login")
-    pass
+def updatem(request, id): #id yani movie id
+    if request.user.is_authenticated: #ke user log in bOode bashe pish az kar
+        movie= get_object_or_404(movie, id=id) #khob aval bayad data khOonde beshe va bad update rokh bd/ ag film ba id marbOote nabOod error 404 mide
+        if request.method == 'GET': #baraye darkhaste data az yek manbae moshakhas (inja dar beyne movie ha mikhad be page shOon dastra30 peyda kone)
+            form= updatemForm(instance=movie)
+            return render (request, 'movie.html', {'movie':movie, 'form':form}) #baraye inke detailm ro bbine va az tarighe form be rOozesh kone user
+        elif request.method== 'POST': #in dastOor baraye send kardan data ha be ye manbae moshakha3/ masalan inja va3 update data haye delkhahe user, azash use kardam
+            form= updatemForm(request.post,instance=movie)
+            if form.is_valid(): #ag data haye form valid bOod, data ha (dar khate bad) save mishan va user hedayat mishe be page detaile movie
+                form.save()
+                return redirect ('movie_detail', id=id) #hedayata user be in page
+            else: #yani ag not valid bOod data ye form
+                return render(request, 'movie.html', {'movie':movie, 'form':form})#forme movie mojadad behesh barmigarde
+    else: #ag user login nakarde khob bayad bargarde be page login
+        return redirect("FinalProject:login") #bargasht be page login
 
 
 def deletem(request, id):  # arsalan

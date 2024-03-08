@@ -14,7 +14,7 @@ class LoginForm(forms.ModelForm):
 class updatemForm(forms.ModelForm):
     class Meta:
         model = Movie
-        fields= ["title","text"]
+        fields= ["title","description","director", "release_date", "genre"] #in details roehtemalan bayad dar model biarim
 
 class MovieForm(forms.ModelForm):#arsalan
     class Meta:
