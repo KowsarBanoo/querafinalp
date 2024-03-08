@@ -1,22 +1,27 @@
 from django import forms
-from .models import User, movie
+from .models import UserModel, Movie, FeedBack
 
-class RegisterForm(forms.ModelsForm):
+class RegisterForm(forms.ModelForm):
     class Meta:
-        model = User
+        model = UserModel
         fields = ["username", "email", "password"]
 
 class LoginForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ["email", "password"]
+        model = UserModel
+        fields = ["username", "password"]
 
-class updatemForm(forms.modelform):
+class updatemForm(forms.ModelForm):
     class Meta:
-        model =movie
+        model = Movie
         fields= ["title","text"]
 
 class MovieForm(forms.ModelForm):#arsalan
     class Meta:
-        model = movie
+        model = Movie
         fields = ['title','text']
+
+class UpdateFeedBackFrom(forms.ModelForm):
+    class Meta:
+        model = FeedBack
+        fields = ['movie','personal_feedback']

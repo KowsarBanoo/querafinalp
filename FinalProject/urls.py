@@ -1,11 +1,11 @@
 from django.urls import path#arsalan
-from .views import createc, retrievec, updatec, deletec, createm, retrievem, updatem, deletem, usersignup, userlogin, userlogout
+from .views import createc, RetrieveMyFeedBackView, UpdateMyFeedBackView, deletec, createm, retrievem, updatem, deletem, usersignup, userlogin, userlogout
 urlpatterns= [
     path('new-critique/', createc, name='new-critique'),
     
-    path("retrieve-critique/", retrievec, name="retrieve-critique"),
+    path('my-feedbacks/<int:pk>/', RetrieveMyFeedBackView.as_view()),
     
-    path('update-critique/', updatec,name='update-critique'),
+    path('my-feedbacks/update/<int:pk>/', UpdateMyFeedBackView.as_view() ,name='update-critique'),
     
     path('delete-critique/', deletec ,name='delete-critique'),
     

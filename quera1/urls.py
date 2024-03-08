@@ -6,5 +6,4 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("FinalProject/", include("FinalProject.urls")),
-    path("critics/", include("app_critics.urls"))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

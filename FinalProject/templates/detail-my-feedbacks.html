@@ -1,0 +1,14 @@
+{% extends "base.html" %} 
+{% block reviewItem %} 
+<div class="reviewItem">
+  <div class="top">
+    <div class="clientProfile">
+      <span>{{ object.user.first_name }} {{ object.user.last_name }}</span>
+    </div>
+  </div>
+  <article>
+    <p class="review">{{ object.personal_feedback }}</p>
+    <p>{{ object.created_at.date }}</p>
+  </article>
+</div>
+{% endblock %}
