@@ -13,8 +13,8 @@ class LoginForm(forms.ModelForm):
 
 class updatemForm(forms.modelform):
     class Meta:
-        model =movie
-        fields= ["title","text"]
+        model = movie
+        fields = ["title","text"]
 
 class MovieForm(forms.ModelForm):#arsalan
     class Meta:

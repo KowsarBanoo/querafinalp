@@ -69,7 +69,7 @@ def deletem(request, id):#arsalan
 
 def usersignup(request):
     if request.user.is_authenticated:
-        return redirect('logout')
+        return redirect('userlogout')
     else:
         if request.method == 'POST':
             form = RegisterForm(request.POST)
@@ -80,15 +80,15 @@ def usersignup(request):
                     password=form.cleaned_data['password'],
                 )
                 login(request, user)
-                return redirect ('createc')
+                return redirect ('new-critique')
             else:
-                return render(request, 'signup.html', {'fom':form})
+                return render(request, 'signup.html', {'form':form})
         else:
             return render(request, 'signup.html', {'form':RegisterForm()})
         
 def userlogin(request):
     if request.user.is_authenticated:
-        return redirect('logout')
+        return redirect('userlogout')
     else:
         if request.method == 'POST':
             form = LoginForm(request.POST)
@@ -99,7 +99,7 @@ def userlogin(request):
                 )
                 if user:
                     login(request, user)
-                    return redirect('createc')
+                    return redirect('new-critique')
                 else:
                     return render(request, 'login.html', {'form':form})
             else:
@@ -110,6 +110,6 @@ def userlogin(request):
 
 def userlogout(request):
     logout(request)
-    return redirect('login')
+    return redirect('userlogin')
 
 
