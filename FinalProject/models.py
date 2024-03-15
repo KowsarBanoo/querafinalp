@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 UserModel = get_user_model()
 
@@ -24,6 +25,8 @@ class Movie(models.Model):
         auto_now=True,
         verbose_name = "زمان بروزرسانی فیلم"
     )
+    def __str__ (self):
+        return self.title
     
 class FeedBack(models.Model):
     user = models.ForeignKey(
@@ -52,3 +55,5 @@ class FeedBack(models.Model):
         default=False,
         verbose_name="وظعیت تایید",
     )
+    def __str__ (self):
+        return self.personal_feedback

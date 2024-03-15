@@ -1,9 +1,10 @@
 from django.urls import path#arsalan
 from .views import createc, RetrieveMyFeedBackView, UpdateMyFeedBackView, deletec, createm, retrievem, updatem, deletem, usersignup, userlogin, userlogout
 urlpatterns= [
+    
     path('new-critique/', createc, name='new-critique'),
     
-    path('my-feedbacks/<int:pk>/', RetrieveMyFeedBackView.as_view()),
+    path('my-feedbacks/<int:pk>/', RetrieveMyFeedBackView.as_view(),name='read'),
     
     path('my-feedbacks/update/<int:pk>/', UpdateMyFeedBackView.as_view() ,name='update-critique'),
     
@@ -21,5 +22,6 @@ urlpatterns= [
 
     path('userlogin/', userlogin, name='userlogin'),
 
-    path('userlogout/', userlogout, name='userlogout')
+    path('userlogout/', userlogout, name='userlogout'),
+    
 ]

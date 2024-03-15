@@ -7,10 +7,12 @@ class filmFilm(admin.ModelAdmin):
     fields = ['title','creator']
     extra = 0
     # this is a decorator. we use decorators in the flask and django.
+
 '''
 class feedbackFeedback(admin.ModelAdmin):
     list_display = ['id','title','text','created_at','updated_at']
 '''
+
 
 
 
