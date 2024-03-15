@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from .models import UserModel, FeedBack, Movie
 # اینها با توجه به اسامی ای که در بخش های مدل و غیره می زنیم زیاد و کم میشن
-from .forms import updatemForm, RegisterForm, LoginForm, MovieForm
+from .forms import updatemForm, RegisterForm, LoginForm, MovieForm,UpdateFeedBackForm
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -11,7 +11,23 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def createc(request):  # createc means create critic/ so createm means create movie
-    pass
+    if request.user.id .is_authenticated:
+        if request.method == 'POST':
+            form = UpdateFeedBackForm(request.POST)
+            if form.is_valid():
+                user = user.objects.get(id == request.user.id)
+                naghd = FeedBack.objects.create(
+                    title = form.cleaned_data['title'],
+                    text = form.cleaned_data['text'],
+                    creator = user
+                )
+                return redirect('FeedBack: read:{naghd.id}')
+            else:
+                return redirect(request,'build.html',{'form':form})
+        else:
+            return render(request, 'build.html', {'form':UpdateFeedBackForm})
+    else:
+        return render('FeeBack:login')
 
 
 class RetrieveMyFeedBackView(LoginRequiredMixin, generic.DetailView):
@@ -37,7 +53,11 @@ class UpdateMyFeedBackView(LoginRequiredMixin, generic.UpdateView):
 
 
 def deletec(request, id):
-    pass
+    feed = FeedBack.object.get(id ==id) # it checks the given id . if that id was equal with user given , it allows user to delete the post.
+    if request.user.id == feed:
+        feed.delete()
+        return redirect('FeedBack:create')
+    return render(request,'delete.html',{'form':UpdateFeedBackForm()})
 
 
 def createm(request):  # arsalan
@@ -61,22 +81,22 @@ def createm(request):  # arsalan
 
 
 def retrievem(request, id): #masalan bezane retrieve,5 bayad betOone data ye movie ye 5 ro bekhOone
-    movie= movie.objects.get (id=id) #baz yabiye data haye obj mobie/ inja bayad modeli baraye mivie dashte bashim
-    if request.user.id== movie.creator.id:#inja faghat sazandeye movie mitOone behesh dastra30 dashte bashe 
-        return render (request, 'read.html', {'object':movie}) #data ro neshOon mide behesh
+    movie= get_object_or_404 (Movie, id=id) #baz yabiye data haye obj mobie/ inja bayad modeli baraye mivie dashte bashim
+    #if request.user.id== movie.creator.id:#inja faghat sazandeye movie mitOone behesh dastra30 dashte bashe 
+    return render (request, 'read.html', {'object':movie}) #data ro neshOon mide behesh
 
 
 def updatem(request, id): #id yani movie id
     if request.user.is_authenticated: #ke user log in bOode bashe pish az kar
-        movie= get_object_or_404(movie, id=id) #khob aval bayad data khOonde beshe va bad update rokh bd/ ag film ba id marbOote nabOod error 404 mide
+        movie= get_object_or_404(Movie, id=id) #khob aval bayad data khOonde beshe va bad update rokh bd/ ag film ba id marbOote nabOod error 404 mide
         if request.method == 'GET': #baraye darkhaste data az yek manbae moshakhas (inja dar beyne movie ha mikhad be page shOon dastra30 peyda kone)
             form= updatemForm(instance=movie)
-            return render (request, 'movie.html', {'movie':movie, 'form':form}) #baraye inke detailm ro bbine va az tarighe form be rOozesh kone user
+            return render (request, 'updatem.html', {'movie':movie, 'form':form}) #baraye inke detailm ro bbine va az tarighe form be rOozesh kone user
         elif request.method== 'POST': #in dastOor baraye send kardan data ha be ye manbae moshakha3/ masalan inja va3 update data haye delkhahe user, azash use kardam
-            form= updatemForm(request.post,instance=movie)
+            form= updatemForm(request.POST,instance=movie)
             if form.is_valid(): #ag data haye form valid bOod, data ha (dar khate bad) save mishan va user hedayat mishe be page detaile movie
                 form.save()
-                return redirect ('movie_detail', id=id) #hedayata user be in page
+                return redirect ('update-movie', id=id) #hedayata user be in page
             else: #yani ag not valid bOod data ye form
                 return render(request, 'movie.html', {'movie':movie, 'form':form})#forme movie mojadad behesh barmigarde
     else: #ag user login nakarde khob bayad bargarde be page login

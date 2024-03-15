@@ -11,9 +11,9 @@ urlpatterns= [
     
     path('new-movie/', createm, name='new-movie'),
     
-    path('retrieve-movie/', retrievem,name='retrieve-movie'),
+    path('retrieve-movie/<int:id>', retrievem,name='retrieve-movie'),
 
-    path('update-movie/', updatem, name='update-movie'),
+    path('update-movie/<int:id>', updatem, name='update-movie'),
 
     path('delete-movie/', deletem,name='delete-movie'),  
 
