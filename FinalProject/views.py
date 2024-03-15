@@ -6,6 +6,8 @@ from .models import UserModel, FeedBack, Movie, User
 from .forms import updatemForm, RegisterForm, LoginForm, MovieForm,UpdateFeedBackForm
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseForbidden
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -15,20 +17,19 @@ def createc(request):  # createc means create critic/ so createm means create mo
         if request.method == 'POST':
             form = UpdateFeedBackForm(request.POST)
             if form.is_valid():
-                user = user.objects.get(id = request.user.id)
+                user = User.objects.get(id = request.user.id)
                 naghd = FeedBack.objects.create(
                     movie = form.cleaned_data['movie'],
                     personal_feedback = form.cleaned_data['personal_feedback'],
                     user = user
                 )
-                #ATOMIC
-                return redirect('read', id = naghd.id)
+                return redirect('read', pk = naghd.id)
             else:
-                return redirect(request,'build.html',{'form':form})
+                return render(request,'build.html',{'form':form})
         else:
             return render(request, 'build.html', {'form':UpdateFeedBackForm})
     else:
-        return render('FeeBack:login')
+        return redirect('usersignup')
 
 
 class RetrieveMyFeedBackView(LoginRequiredMixin, generic.DetailView):
@@ -42,6 +43,7 @@ class UpdateMyFeedBackView(LoginRequiredMixin, generic.UpdateView):# vel mishe
     template_name = "update_my_feedback_from.html"
     model = FeedBack
     fields = ['movie', 'personal_feedback']
+    success_url = reverse_lazy('new-movie')
 
     def get_queryset(self):
         return FeedBack.objects.filter(user=self.request.user)
@@ -57,7 +59,7 @@ def deletec(request, id):# dorost kar mikone valy eror mide
     feed = FeedBack.objects.get(id = id) # it checks the given id . if that id was equal with user given , it allows user to delete the post.
     if request.user.id == feed.user.id:
         feed.delete()
-        return redirect('FeedBack:create')
+        return redirect('new-critique')
     return render(request,'delete.html',{'form':UpdateFeedBackForm()})
 
 
@@ -96,21 +98,23 @@ def updatem(request, id): #id yani movie id ### moshkel dare
         elif request.method== 'POST': #in dastOor baraye send kardan data ha be ye manbae moshakha3/ masalan inja va3 update data haye delkhahe user, azash use kardam
             form= updatemForm(request.POST)
             if form.is_valid(): #ag data haye form valid bOod, data ha (dar khate bad) save mishan va user hedayat mishe be page detaile movie
-                form.save()
+                movie.title = form.cleaned_data['title']
+                movie.text = form.cleaned_data['text']
+                movie.save()
                 return redirect ('update-movie', id=id) #hedayata user be in page
             else: #yani ag not valid bOod data ye form
                 return render(request, 'movie.html', {'movie':movie, 'form':form})#forme movie mojadad behesh barmigarde
     else: #ag user login nakarde khob bayad bargarde be page login
-        return redirect("FinalProject:login") #bargasht be page login
+        return redirect("login") #bargasht be page login
 
 
 def deletem(request, id):  # arsalan
     k = Movie.objects.get(id=id)
     if request.user.id == k.creator.id:
         k.delete()
-        return redirect('delete-movie')  # دوباره اگه خواست پاک کنه
+        return redirect('new-movie')  # دوباره اگه خواست پاک کنه
     else:
-        return 403
+        return HttpResponseForbidden("403 Forbidden - You do not have permission to access this resource.")
 
 def usersignup(request):
     if request.user.is_authenticated:

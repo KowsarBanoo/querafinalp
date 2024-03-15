@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 UserModel = get_user_model()
 
@@ -57,3 +58,6 @@ class FeedBack(models.Model):
     )
     def __str__ (self):
         return self.personal_feedback
+    def get_absolute_url(self):
+        return reverse("feedback", kwargs={"pk": self.pk})
+    
