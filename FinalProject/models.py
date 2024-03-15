@@ -34,7 +34,8 @@ class FeedBack(models.Model):
     movie = models.ForeignKey(
         Movie,
         on_delete = models.CASCADE,
-        verbose_name="نام فیلم"
+        verbose_name="نام فیلم",
+        null = True
     )
     personal_feedback = models.TextField(
         verbose_name="نقد",
